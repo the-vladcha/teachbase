@@ -18,6 +18,10 @@ DB_PASSWORD
 DB_HOST
 DB_PORT
 ```
+3) Запустить сервис из корневой директории ```src```:
+```
+python manage.py migrate
+```
 4) Запустить сервис из корневой директории ```src```:
 ```
 python manage.py runserver
