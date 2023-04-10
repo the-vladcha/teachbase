@@ -45,7 +45,7 @@ COPY --from=builder /usr/src/app/requirements.txt .
 RUN python3 -m pip install --no-cache /wheels/*
 
 # copy project
-COPY . $APP_HOME
+COPY ./src $APP_HOME
 
 # chown all the files to the app user
 RUN chown -R app:app $APP_HOME

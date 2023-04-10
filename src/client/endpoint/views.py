@@ -36,9 +36,14 @@ class CourseApiView(APIView):
         return Response(res.json(), status=res.status_code)
 
     def save_course(self, data: dict):
+        # Для упрощения убираем некоторые поля, которые не были включены в модель
+        data.pop('authors')
+        data.pop('types')
+        data.pop('sections')
+
         serializer = CourseSerializer(data=data)
         if serializer.is_valid():
-            Course.objects.create_or_update(**data)
+            Course.objects.update_or_create(**data)
         else:
             logger.warning('Course data is not saved!')
 
