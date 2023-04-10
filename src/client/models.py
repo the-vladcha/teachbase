@@ -30,5 +30,7 @@ class Course(models.Model):
     types = ArrayField(base_field=models.JSONField(), default=list)
     sections = ArrayField(base_field=models.JSONField(), default=list)
 
+    objects = models.Manager()
+
     def __str__(self):
         return self.name
