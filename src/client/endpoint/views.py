@@ -43,7 +43,8 @@ class CourseApiView(APIView):
 
         serializer = CourseSerializer(data=data)
         if serializer.is_valid():
-            Course.objects.update_or_create(**data)
+            pk: int = data.pop('id')
+            Course.objects.update_or_create(defaults=data, pk=pk)
         else:
             logger.warning('Course data is not saved!')
 
