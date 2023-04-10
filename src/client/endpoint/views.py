@@ -9,6 +9,9 @@ from client.serializers import CourseSerializer
 from client.services import teachbase_service
 from teachbase.settings import TEACHBASE_HOST
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class CoursesListApiView(APIView):
     """Получение списка курсов из сервиса Teachbase
@@ -29,7 +32,15 @@ class CourseApiView(APIView):
         url: str = f'{TEACHBASE_HOST}/courses/{course_id}'
         headers: dict = teachbase_service.teachbase_auth()
         res: requests.Response = requests.get(url, headers=headers)
+        self.save_course(res.json())
         return Response(res.json(), status=res.status_code)
+
+    def save_course(self, data: dict):
+        serializer = CourseSerializer(data=data)
+        if serializer.is_valid():
+            Course.objects.create_or_update(**data)
+        else:
+            logger.warning('Course data is not saved!')
 
 
 class UserApiView(APIView):

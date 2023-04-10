@@ -26,9 +26,9 @@ class Course(models.Model):
     hide_viewer_navigation = models.BooleanField(default=False)
     duration = models.IntegerField()
     account_id = models.IntegerField()
-    authors = ArrayField(base_field=models.IntegerField(), default=list)
-    types = ArrayField(base_field=models.IntegerField(), default=list)
-    sections = ArrayField(base_field=models.IntegerField(), default=list)
+    authors = ArrayField(base_field=models.JSONField(), default=list)
+    types = ArrayField(base_field=models.JSONField(), default=list)
+    sections = ArrayField(base_field=models.JSONField(), default=list)
 
     def __str__(self):
         return self.name
