@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    command: > 
+        sh -c "python manage.py migrate --no-input &&
+               python manage.py collectstatic --no-input --clear &&
+               gunicorn src.teachbase.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - static_volume:/home/app/web/assets
+    restart: always
+    env_file:
+      - .env
+  nginx:
+    image: nginx:1.19.0-alpine
+    restart: always
+    volumes:
+      - static_volume:/home/app/web/assets
+      - ./nginx:/etc/nginx/templates
+    ports:
+      - "${SERVICE_PORT}:80"
+    environment:
+      - NGINX_HOST=web:8000
+      - NGINX_PORT=80
+    env_file:
+      - nginx.env
+    depends_on:
+      - web
+volumes:
+  static_volume:
